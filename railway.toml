@@ -1,0 +1,8 @@
+[build]
+cmd = "cd springapp && mvn clean package -DskipTests"
+
+[deploy]
+startCommand = "cd springapp && java -jar target/*.jar"
+
+[variables]
+PORT = "8080"

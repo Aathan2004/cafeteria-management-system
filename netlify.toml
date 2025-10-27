@@ -1,10 +1,11 @@
 [build]
   base = "my-react-app"
   publish = "my-react-app/build"
-  command = "npm run build"
+  command = "npm install && npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
+  CI = "false"
 
 [[redirects]]
   from = "/*"

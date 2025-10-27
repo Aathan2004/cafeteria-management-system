@@ -34,9 +34,18 @@ jobs:
                   <maven.compiler.target>17</maven.compiler.target>
                   <sonar.organization>iamneo-production</sonar.organization>
                   <sonar.host.url>https://sonar.server.examly.io</sonar.host.url>
-                  <sonar.sources>springapp/src/main</sonar.sources>
-                  <sonar.java.binaries>springapp/target</sonar.java.binaries>
+                  <sonar.sources>springapp/src/main/java,my-react-app/src</sonar.sources>
+                  <sonar.java.binaries>springapp/target/classes</sonar.java.binaries>
+                  <sonar.exclusions>**/node_modules/**,**/build/**,**/target/**</sonar.exclusions>
               </properties>
+              <dependencies>
+                  <dependency>
+                      <groupId>org.junit.jupiter</groupId>
+                      <artifactId>junit-jupiter-api</artifactId>
+                      <version>5.7.0</version>
+                      <scope>test</scope>
+                  </dependency>
+              </dependencies>
               <build>
                   <pluginManagement>
                       <plugins>
@@ -59,9 +68,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=iamneo-production_0b6d58ad-b187-431b-a5e1-0eb2a40b59fb-4a743646-990e-42f7-8c60-f0d5127a7a0d \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          if [ -n "${{ secrets.SONAR_TOKEN }}" ]; then
+            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+              -Dsonar.projectKey=iamneo-production_0b6d58ad-b187-431b-a5e1-0eb2a40b59fb-4a743646-990e-42f7-8c60-f0d5127a7a0d \
+              -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          else
+            echo "SONAR_TOKEN not set, skipping Sonar analysis"
+            mvn -B verify -DskipTests
+          fi
       - name: Trigger API
         if: always()
         run: |

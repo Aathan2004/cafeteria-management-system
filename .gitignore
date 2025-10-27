@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+my-react-app/node_modules/
+
+# Build outputs
+springapp/target/
+my-react-app/build/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+springapp/*.log
+
+# Environment files
+.env
+.env.local
+
+# Database
+*.db
+*.sqlite

@@ -1,0 +1,37 @@
+name: Simple Build Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Check React App
+        run: |
+          cd my-react-app
+          npm install
+          CI=false npm run build
+          echo "✅ React build successful"
+      
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      
+      - name: Check Spring Boot App
+        run: |
+          cd springapp
+          mvn clean compile -DskipTests
+          echo "✅ Spring Boot build successful"
